@@ -1,0 +1,94 @@
+plugins {
+    alias(libs.plugins.android.application)
+}
+
+// Auto-generate keystore if it doesn't exist
+def keystoreFile = file("release.jks")
+if (!keystoreFile.exists()) {
+    println "Generating release keystore automatically..."
+    def javaHome = System.getProperty("java.home")
+    def keytoolBinary = javaHome ? "${javaHome}/bin/keytool" : "keytool"
+    if (org.gradle.internal.os.OperatingSystem.current().isWindows()) {
+        keytoolBinary += ".exe"
+    }
+    def cmdArray = [
+        keytoolBinary, 
+        "-genkeypair", 
+        "-v", 
+        "-keystore", keystoreFile.absolutePath, 
+        "-alias", "fifakey", 
+        "-keyalg", "RSA", 
+        "-keysize", "2048", 
+        "-validity", "10000", 
+        "-storepass", "fifa2026", 
+        "-keypass", "fifa2026", 
+        "-dname", "CN=FIFA2026, O=FIFA2026, C=BD"
+    ]
+    def process = cmdArray.execute()
+    process.waitFor()
+    if (process.exitValue() != 0) {
+        println "Error generating keystore: " + process.err.text
+    } else {
+        println "Successfully generated release keystore at: " + keystoreFile.absolutePath
+    }
+}
+
+android {
+    namespace 'com.bnxit.tsports'
+    compileSdk {
+        version = release(36) {
+            minorApiLevel = 1
+        }
+    }
+
+    defaultConfig {
+        applicationId "com.bnxit.tsports"
+        minSdk 24
+        targetSdk 36
+        versionCode 1
+        versionName "1.0"
+
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+    }
+
+    signingConfigs {
+        release {
+            storeFile file("release.jks")
+            storePassword "fifa2026"
+            keyAlias "fifakey"
+            keyPassword "fifa2026"
+        }
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled true
+            shrinkResources true
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+            signingConfig signingConfigs.release
+        }
+    }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_11
+        targetCompatibility JavaVersion.VERSION_11
+    }
+    buildFeatures {
+        viewBinding true
+    }
+}
+
+dependencies {
+    implementation libs.core.ktx
+    implementation libs.appcompat
+    implementation libs.material
+    implementation libs.leanback
+    implementation libs.media3.exoplayer
+    implementation libs.media3.exoplayer.hls
+    implementation libs.media3.ui
+    implementation libs.media3.ui.leanback
+    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-android:1.7.3'
+    
+    testImplementation libs.junit
+    androidTestImplementation libs.ext.junit
+    androidTestImplementation libs.espresso.core
+}
