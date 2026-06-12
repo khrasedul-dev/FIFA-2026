@@ -2,6 +2,12 @@
 
 A native Android TV application built in Kotlin utilizing **AndroidX Media3 ExoPlayer** to stream live IPTV content. Optimized for low-latency streaming and smooth D-pad controls.
 
+## 📥 Direct Download
+
+You can download the pre-compiled, optimized, and signed production APK directly from the repository:
+
+👉 **[Download FIFA 2026 Release APK (v1.0 - 4.64 MB)](https://github.com/khrasedul-dev/FIFA-2026/raw/main/build_output/FIFA2026-release.apk)**
+
 ---
 
 ## 🚀 Key Features
