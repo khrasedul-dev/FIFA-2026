@@ -5,14 +5,22 @@
     android:layout_height="match_parent"
     android:background="@android:color/black">
 
-    <androidx.media3.ui.PlayerView
-        android:id="@+id/player_view"
+    <!-- WebView: loads player.php exactly like the browser does -->
+    <WebView
+        android:id="@+id/web_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        app:use_controller="false"
-        app:show_buffering="when_playing"
-        app:resize_mode="fit"
-        android:keepScreenOn="true" />
+        android:keepScreenOn="true"
+        android:hardwareAccelerated="true" />
+
+    <!-- Subtle contrast-enhancing overlay (non-interactive) -->
+    <View
+        android:id="@+id/video_overlay"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#1A000000"
+        android:focusable="false"
+        android:clickable="false" />
 
     <!-- Developer Info Panel (Initially Hidden) -->
     <com.google.android.material.card.MaterialCardView
@@ -84,34 +92,16 @@
         </LinearLayout>
     </com.google.android.material.card.MaterialCardView>
 
-    <!-- Controls Layout (Bottom Right) -->
-    <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
+    <!-- Developer Info Button (Bottom Right only — aspect ratio removed) -->
+    <ImageButton
+        android:id="@+id/btn_developer_info"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:src="@drawable/ic_info"
+        android:background="?android:attr/selectableItemBackgroundBorderless"
+        android:focusable="true"
         android:layout_gravity="bottom|end"
         android:layout_margin="24dp"
-        android:gravity="center_vertical">
+        android:contentDescription="Developer Info" />
 
-        <!-- Aspect Ratio Button -->
-        <ImageButton
-            android:id="@+id/btn_aspect_ratio"
-            android:layout_width="48dp"
-            android:layout_height="48dp"
-            android:src="@drawable/ic_aspect_ratio"
-            android:background="?android:attr/selectableItemBackgroundBorderless"
-            android:focusable="true"
-            android:contentDescription="Change Aspect Ratio"
-            android:layout_marginEnd="16dp" />
-
-        <!-- Info/Developer Button -->
-        <ImageButton
-            android:id="@+id/btn_developer_info"
-            android:layout_width="48dp"
-            android:layout_height="48dp"
-            android:src="@drawable/ic_info"
-            android:background="?android:attr/selectableItemBackgroundBorderless"
-            android:focusable="true"
-            android:contentDescription="Developer Info" />
-    </LinearLayout>
 </FrameLayout>
